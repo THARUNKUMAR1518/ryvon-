@@ -140,7 +140,28 @@ async function seedDemoUser() {
 
 // Health check
 app.get('/api/health', (req, res) => {
-    res.json({ message: 'Server is running', timestamp: new Date().toISOString() });
+    res.json({ 
+        message: 'Server is running', 
+        timestamp: new Date().toISOString(),
+        demo: {
+            username: DEMO_CREDENTIALS.username,
+            password: DEMO_CREDENTIALS.password,
+            email: DEMO_CREDENTIALS.email
+        }
+    });
+});
+
+// Get demo credentials
+app.get('/api/demo-credentials', (req, res) => {
+    res.json({ 
+        demo: {
+            username: DEMO_CREDENTIALS.username,
+            password: DEMO_CREDENTIALS.password,
+            email: DEMO_CREDENTIALS.email,
+            phone: DEMO_CREDENTIALS.phone,
+            business: DEMO_CREDENTIALS.business
+        }
+    });
 });
 
 // Initialize demo user (for Vercel cold starts)
@@ -213,18 +234,48 @@ app.post('/api/auth/register', async (req, res) => {
     }
 });
 
+// Hard-coded demo credentials (always available)
+const DEMO_CREDENTIALS = {
+    username: 'demo',
+    password: 'demo123',
+    email: 'demo@ryvon.com',
+    phone: '9876543210',
+    business: 'Demo Business'
+};
+
 // Login endpoint
 app.post('/api/auth/login', async (req, res) => {
     try {
-        await connectToDatabase();
-        
         const { username, password } = req.body;
 
         if (!username || !password) {
             return res.status(400).json({ message: 'Username and password are required' });
         }
 
-        // Find user
+        // Check hard-coded demo credentials first
+        if (username === DEMO_CREDENTIALS.username && password === DEMO_CREDENTIALS.password) {
+            const token = jwt.sign(
+                { username: DEMO_CREDENTIALS.username, email: DEMO_CREDENTIALS.email },
+                JWT_SECRET,
+                { expiresIn: '24h' }
+            );
+
+            return res.json({
+                message: 'Login successful',
+                token,
+                user: {
+                    username: DEMO_CREDENTIALS.username,
+                    email: DEMO_CREDENTIALS.email,
+                    phone: DEMO_CREDENTIALS.phone,
+                    business: DEMO_CREDENTIALS.business
+                }
+            });
+        }
+
+        // Otherwise, check database
+        await connectToDatabase();
+
+        // Find user in database
         const user = await User.findOne({ username });
 
         if (!user) {
