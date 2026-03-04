@@ -1,0 +1,1881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ryvon - GST Billing & POS Software for Indian Businesses</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#2563eb',
+                        secondary: '#10b981',
+                        accent: '#f59e0b',
+                        dark: '#1e293b',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            scroll-behavior: smooth;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #2563eb 0%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        }
+        
+        .gradient-bg-light {
+            background: linear-gradient(135deg, #eff6ff 0%, #ecfdf5 100%);
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .hero-pattern {
+            background-image: radial-gradient(circle at 1px 1px, rgba(37, 99, 235, 0.15) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+        }
+        
+        .btn-secondary {
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .screenshot-shadow {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .pricing-card {
+            transition: all 0.3s ease;
+        }
+        
+        .pricing-card:hover {
+            transform: scale(1.02);
+        }
+        
+        .pricing-popular {
+            border: 2px solid #2563eb;
+            position: relative;
+        }
+        
+        .pricing-popular::before {
+            content: 'Most Popular';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2563eb;
+            color: white;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .testimonial-card {
+            transition: all 0.3s ease;
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .faq-item {
+            transition: all 0.3s ease;
+        }
+        
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .faq-item.active .faq-content {
+            max-height: 200px;
+        }
+        
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+        
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+        
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+        
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .trust-badge {
+            animation: pulse-slow 2s infinite;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-text {
+                font-size: 2.5rem;
+                line-height: 1.2;
+            }
+        }
+        
+        .screenshot-carousel {
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .screenshot-slide {
+            scroll-snap-align: center;
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: #2563eb;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        @media (max-width: 1024px) {
+            .absolute.right-0.top-1\/2 {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 antialiased overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-effect transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <img src="logo.jpeg" alt="Ryvon Logo" class="h-16 w-auto">
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="nav-link text-gray-700 hover:text-primary font-medium transition-colors">Features</a>
+                    <a href="#product" class="nav-link text-gray-700 hover:text-primary font-medium transition-colors">Product</a>
+                    <a href="#pricing" class="nav-link text-gray-700 hover:text-primary font-medium transition-colors">Pricing</a>
+                    <a href="#faq" class="nav-link text-gray-700 hover:text-primary font-medium transition-colors">FAQ</a>
+                    <a href="#contact" class="nav-link text-gray-700 hover:text-primary font-medium transition-colors">Contact</a>
+                </div>
+
+                <!-- CTA Buttons -->
+                <div class="hidden md:flex items-center gap-4">
+                    <button onclick="openDemoModal()" class="text-primary font-medium hover:text-blue-700 transition-colors">Book Demo</button>
+                    <button onclick="openLoginModal()" class="text-gray-700 font-medium hover:text-primary transition-colors flex items-center gap-2">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                    <button onclick="openTrialModal()" class="btn-primary text-white px-6 py-2.5 rounded-full font-medium">Start Free Trial</button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden text-gray-700 hover:text-primary" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu fixed inset-y-0 right-0 w-80 bg-white shadow-2xl z-50 md:hidden" id="mobileMenu">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-8">
+                    <div class="flex items-center gap-2">
+                        <img src="logo.jpeg" alt="Ryvon Logo" class="h-8 w-8 rounded-lg object-cover">
+                        <span class="text-2xl font-bold text-gray-900">Ryvon</span>
+                    </div>
+                    <button onclick="toggleMobileMenu()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+                <div class="space-y-4">
+                    <a href="#features" onclick="toggleMobileMenu()" class="block py-3 text-lg font-medium text-gray-700 hover:text-primary border-b border-gray-100">Features</a>
+                    <a href="#product" onclick="toggleMobileMenu()" class="block py-3 text-lg font-medium text-gray-700 hover:text-primary border-b border-gray-100">Product</a>
+                    <a href="#pricing" onclick="toggleMobileMenu()" class="block py-3 text-lg font-medium text-gray-700 hover:text-primary border-b border-gray-100">Pricing</a>
+                    <a href="#faq" onclick="toggleMobileMenu()" class="block py-3 text-lg font-medium text-gray-700 hover:text-primary border-b border-gray-100">FAQ</a>
+                    <a href="#contact" onclick="toggleMobileMenu()" class="block py-3 text-lg font-medium text-gray-700 hover:text-primary border-b border-gray-100">Contact</a>
+                </div>
+                <div class="mt-8 space-y-4">
+                    <button onclick="openLoginModal(); toggleMobileMenu();" class="w-full py-3 border-2 border-gray-300 text-gray-700 rounded-full font-medium flex items-center justify-center gap-2">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                    <button onclick="openDemoModal(); toggleMobileMenu();" class="w-full py-3 border-2 border-primary text-primary rounded-full font-medium">Book Demo</button>
+                    <button onclick="openTrialModal(); toggleMobileMenu();" class="w-full py-3 gradient-bg text-white rounded-full font-medium">Start Free Trial</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden hero-pattern">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <!-- Left Content -->
+                <div class="text-center lg:text-left scroll-reveal">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-primary rounded-full text-sm font-medium mb-6">
+                        <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                        Now with EV Ride Billing
+                    </div>
+                    
+                    <h1 class="hero-text text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+                        All-in-One <span class="gradient-text">GST Billing</span> & POS Software for Indian Businesses
+                    </h1>
+                    
+                    <p class="text-xl text-gray-600 mb-8 leading-relaxed">
+                        Fast GST-ready invoicing, inventory management, reports, and EV ride billing. Built for retailers, restaurants, and service providers.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
+                        <button onclick="openTrialModal()" class="btn-primary text-white px-8 py-4 rounded-full font-semibold text-lg flex items-center justify-center gap-2">
+                            Start Free Trial <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button onclick="openDemoModal()" class="btn-secondary bg-white text-gray-800 border-2 border-gray-200 px-8 py-4 rounded-full font-semibold text-lg hover:border-primary hover:text-primary flex items-center justify-center gap-2">
+                            <i class="fas fa-play-circle"></i> Book Demo
+                        </button>
+                    </div>
+                    
+                    <!-- Trust Badges -->
+                    <div class="flex flex-wrap items-center justify-center lg:justify-start gap-6 text-sm text-gray-600">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-shield-alt text-green-500"></i>
+                            <span>GST Ready</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-lock text-blue-500"></i>
+                            <span>SSL Secure</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-cloud text-purple-500"></i>
+                            <span>Cloud Sync</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Content - Screenshots -->
+                <div class="relative scroll-reveal">
+                    <div class="relative z-10 animate-float">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop" alt="Ryvon Dashboard" class="rounded-2xl screenshot-shadow w-full">
+                        
+                        <!-- Floating Elements -->
+                        <div class="absolute -top-6 -right-6 bg-white p-4 rounded-xl shadow-lg animate-pulse-slow hidden lg:block">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-500">Invoice Sent</p>
+                                    <p class="font-bold text-gray-800">₹12,500</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-lg animate-pulse-slow hidden lg:block" style="animation-delay: 1s;">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-500">Today's Sales</p>
+                                    <p class="font-bold text-gray-800">+24.5%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Background Decoration -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-blue-400 to-green-400 rounded-2xl transform rotate-3 opacity-20 -z-10"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Background Elements -->
+        <div class="absolute top-20 left-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse-slow"></div>
+        <div class="absolute bottom-20 right-10 w-72 h-72 bg-green-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse-slow" style="animation-delay: 2s;"></div>
+    </section>
+
+    <!-- Trusted By Section -->
+    <section class="py-12 bg-white border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center scroll-reveal">
+                <div class="p-4">
+                    <p class="text-3xl font-bold text-gray-900">5,000+</p>
+                    <p class="text-sm text-gray-500 mt-1">Businesses Trust Us</p>
+                </div>
+                <div class="p-4">
+                    <p class="text-3xl font-bold text-gray-900">1M+</p>
+                    <p class="text-sm text-gray-500 mt-1">Invoices Generated</p>
+                </div>
+                <div class="p-4">
+                    <p class="text-3xl font-bold text-gray-900">99.9%</p>
+                    <p class="text-sm text-gray-500 mt-1">Uptime Guaranteed</p>
+                </div>
+                <div class="p-4">
+                    <p class="text-3xl font-bold text-gray-900">100%</p>
+                    <p class="text-sm text-gray-500 mt-1">Cloud Backup</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 scroll-reveal">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Everything You Need to Run Your Business</h2>
+                <p class="text-xl text-gray-600">Powerful features designed for Indian businesses</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="feature-card bg-white p-8 rounded-2xl card-hover scroll-reveal">
+                    <div class="feature-icon w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 text-2xl mb-6">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">GST Billing & Tax Reports</h3>
+                    <p class="text-gray-600">Generate GST-compliant invoices instantly. Auto-calculate CGST, SGST, and IGST.</p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="feature-card bg-white p-8 rounded-2xl card-hover scroll-reveal">
+                    <div class="feature-icon w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center text-green-600 text-2xl mb-6">
+                        <i class="fas fa-barcode"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Fast POS & Barcode</h3>
+                    <p class="text-gray-600">Lightning-fast billing with barcode scanning. Perfect for retail stores and supermarkets.</p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="feature-card bg-white p-8 rounded-2xl card-hover scroll-reveal">
+                    <div class="feature-icon w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center text-purple-600 text-2xl mb-6">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Inventory Management</h3>
+                    <p class="text-gray-600">Track stock levels, get low-stock alerts, and manage multiple warehouses effortlessly.</p>
+                </div>
+                
+                <!-- Feature 4 -->
+                <div class="feature-card bg-white p-8 rounded-2xl card-hover scroll-reveal">
+                    <div class="feature-icon w-14 h-14 bg-orange-100 rounded-xl flex items-center justify-center text-orange-600 text-2xl mb-6">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Smart Financial Reports</h3>
+                    <p class="text-gray-600">Detailed analytics on sales, purchases, and profits. Export to Excel/PDF.</p>
+                </div>
+                
+                <!-- Feature 5 -->
+                <div class="feature-card bg-white p-8 rounded-2xl card-hover scroll-reveal">
+                    <div class="feature-icon w-14 h-14 bg-red-100 rounded-xl flex items-center justify-center text-red-600 text-2xl mb-6">
+                        <i class="fas fa-taxi"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">EV / Taxi Ride Billing</h3>
+                    <p class="text-gray-600">Specialized billing for electric vehicles and taxi services with trip-based invoicing.</p>
+                </div>
+                
+                <!-- Feature 6 -->
+                <div class="feature-card bg-white p-8 rounded-2xl card-hover scroll-reveal">
+                    <div class="feature-icon w-14 h-14 bg-teal-100 rounded-xl flex items-center justify-center text-teal-600 text-2xl mb-6">
+                        <i class="fas fa-users-cog"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Multi-Business & Multi-User</h3>
+                    <p class="text-gray-600">Manage multiple businesses with role-based access for your team members.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Screenshots Section -->
+    <section id="product" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 scroll-reveal">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">See Ryvon in Action</h2>
+                <p class="text-xl text-gray-600">Beautiful, intuitive interface designed for speed</p>
+            </div>
+            
+            <div class="relative scroll-reveal">
+                <div class="screenshot-carousel flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory scrollbar-hide" id="screenshotCarousel">
+                    <div class="screenshot-slide flex-shrink-0 w-full md:w-4/5 lg:w-2/3 snap-center">
+                        <div class="bg-gray-100 rounded-2xl p-4 screenshot-shadow">
+                            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=700&fit=crop" alt="Dashboard" class="rounded-xl w-full">
+                            <p class="text-center mt-4 font-medium text-gray-700">Intuitive Dashboard</p>
+                        </div>
+                    </div>
+                    <div class="screenshot-slide flex-shrink-0 w-full md:w-4/5 lg:w-2/3 snap-center">
+                        <div class="bg-gray-100 rounded-2xl p-4 screenshot-shadow">
+                            <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=700&fit=crop" alt="Billing Screen" class="rounded-xl w-full">
+                            <p class="text-center mt-4 font-medium text-gray-700">Fast Billing Interface</p>
+                        </div>
+                    </div>
+                    <div class="screenshot-slide flex-shrink-0 w-full md:w-4/5 lg:w-2/3 snap-center">
+                        <div class="bg-gray-100 rounded-2xl p-4 screenshot-shadow">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=700&fit=crop" alt="Reports" class="rounded-xl w-full">
+                            <p class="text-center mt-4 font-medium text-gray-700">Detailed Reports</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Navigation Arrows -->
+                <button onclick="scrollScreenshots(-1)" class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:text-primary hidden lg:flex">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button onclick="scrollScreenshots(1)" class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:text-primary hidden lg:flex">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="py-20 gradient-bg-light">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-12 text-center">
+                <div class="scroll-reveal">
+                    <div class="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center text-white text-2xl mx-auto mb-6 transform rotate-3">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Save Time</h3>
+                    <p class="text-gray-600">Automate your billing and accounting. Generate invoices in seconds, not minutes.</p>
+                </div>
+                
+                <div class="scroll-reveal">
+                    <div class="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center text-white text-2xl mx-auto mb-6 transform -rotate-3">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Easy GST Compliance</h3>
+                    <p class="text-gray-600">Stay compliant with automatic GST calculations and ready-to-file reports.</p>
+                </div>
+                
+                <div class="scroll-reveal">
+                    <div class="w-16 h-16 bg-purple-500 rounded-2xl flex items-center justify-center text-white text-2xl mx-auto mb-6 transform rotate-3">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Grow Your Business</h3>
+                    <p class="text-gray-600">Insights and analytics help you make better decisions and scale faster.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 scroll-reveal">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h2>
+                <p class="text-xl text-gray-600">Choose the plan that fits your business</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Free Plan -->
+                <div class="pricing-card bg-white border border-gray-200 rounded-2xl p-8 scroll-reveal">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Free</h3>
+                    <p class="text-gray-500 mb-6">For small businesses</p>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold text-gray-900">₹0</span>
+                        <span class="text-gray-500">/month</span>
+                    </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center gap-3 text-gray-600">
+                            <i class="fas fa-check text-green-500"></i>
+                            <span>Up to 100 invoices/month</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-gray-600">
+                            <i class="fas fa-check text-green-500"></i>
+                            <span>Basic GST reports</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-gray-600">
+                            <i class="fas fa-check text-green-500"></i>
+                            <span>1 user</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-gray-400">
+                            <i class="fas fa-times"></i>
+                            <span>Multi-device sync</span>
+                        </li>
+                    </ul>
+                    <button onclick="openTrialModal()" class="w-full py-3 border-2 border-primary text-primary rounded-full font-medium hover:bg-primary hover:text-white transition-all">Start Free</button>
+                </div>
+                
+                <!-- Basic Plan -->
+                <div class="pricing-card pricing-popular bg-white rounded-2xl p-8 scroll-reveal">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Basic</h3>
+                    <p class="text-gray-500 mb-6">For growing businesses</p>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold text-gray-900">₹999</span>
+                        <span class="text-gray-500">/year</span>
+                    </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center gap-3 text-gray-600">
+                            <i class="fas fa-check text-green-500"></i>
+                            <span>Unlimited invoices</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-gray-600">
+                            <i class="fas fa-check text-green-500"></i>
+                            <span>Advanced GST reports</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-gray-600">
+                            <i class="fas fa-check text-green-500"></i>
+                            <span>3 users</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-gray-600">
+                            <i class="fas fa-check text-green-500"></i>
+                            <span>Cloud backup</span>
+                        </li>
+                    </ul>
+                    <button onclick="openTrialModal()" class="w-full py-3 gradient-bg text-white rounded-full font-medium hover:shadow-lg transition-all">Start Free Trial</button>
+                </div>
+                
+                <!-- Premium Plan -->
+                <div class="pricing-card bg-white border border-gray-200 rounded-2xl p-8 scroll-reveal">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Premium</h3>
+                    <p class="text-gray-500 mb-6">For enterprises</p>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold text-gray-900">₹2,499</span>
+                        <span class="text-gray-500">/year</span>
+                    </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center gap-3 text-gray-600">
+                            <i class="fas fa-check text-green-500"></i>
+                            <span>Everything in Basic</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-gray-600">
+                            <i class="fas fa-check text-green-500"></i>
+                            <span>Unlimited users</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-gray-600">
+                            <i class="fas fa-check text-green-500"></i>
+                            <span>Multi-business</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-gray-600">
+                            <i class="fas fa-check text-green-500"></i>
+                            <span>Priority support</span>
+                        </li>
+                    </ul>
+                    <button onclick="openTrialModal()" class="w-full py-3 border-2 border-primary text-primary rounded-full font-medium hover:bg-primary hover:text-white transition-all">Start Free Trial</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 scroll-reveal">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Loved by Business Owners</h2>
+                <p class="text-xl text-gray-600">See what our customers say</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="testimonial-card bg-white p-8 rounded-2xl shadow-sm scroll-reveal">
+                    <div class="flex items-center gap-1 mb-4 text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-gray-700 mb-6 text-lg">"Helped us close month-end 2x faster. GST filing is now a breeze with automatic reports."</p>
+                    <div class="flex items-center gap-4">
+                        <img src="https://ui-avatars.com/api/?name=Rajesh+Kumar&background=2563eb&color=fff" alt="Rajesh" class="w-12 h-12 rounded-full">
+                        <div>
+                            <p class="font-bold text-gray-900">Rajesh Kumar</p>
+                            <p class="text-sm text-gray-500">Owner, RK Electronics</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card bg-white p-8 rounded-2xl shadow-sm scroll-reveal">
+                    <div class="flex items-center gap-1 mb-4 text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-gray-700 mb-6 text-lg">"EV ride billing + reports made scaling easy. Perfect for our taxi fleet management."</p>
+                    <div class="flex items-center gap-4">
+                        <img src="https://ui-avatars.com/api/?name=Priya+Sharma&background=10b981&color=fff" alt="Priya" class="w-12 h-12 rounded-full">
+                        <div>
+                            <p class="font-bold text-gray-900">Priya Sharma</p>
+                            <p class="text-sm text-gray-500">CEO, Green Cabs</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card bg-white p-8 rounded-2xl shadow-sm scroll-reveal">
+                    <div class="flex items-center gap-1 mb-4 text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-gray-700 mb-6 text-lg">"Best inventory management feature. Low stock alerts save us from stockouts regularly."</p>
+                    <div class="flex items-center gap-4">
+                        <img src="https://ui-avatars.com/api/?name=Amit+Patel&background=f59e0b&color=fff" alt="Amit" class="w-12 h-12 rounded-full">
+                        <div>
+                            <p class="font-bold text-gray-900">Amit Patel</p>
+                            <p class="text-sm text-gray-500">Director, Patel Retail</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-20 bg-white">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 scroll-reveal">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+                <p class="text-xl text-gray-600">Got questions? We've got answers.</p>
+            </div>
+            
+            <div class="space-y-4 scroll-reveal">
+                <div class="faq-item bg-gray-50 rounded-xl overflow-hidden">
+                    <button class="w-full px-6 py-4 flex items-center justify-between text-left font-medium text-gray-900 hover:bg-gray-100 transition-colors" onclick="toggleFaq(this)">
+                        <span>Is Ryvon GST compliant?</span>
+                        <i class="fas fa-chevron-down faq-icon transition-transform"></i>
+                    </button>
+                    <div class="faq-content px-6">
+                        <p class="pb-4 text-gray-600">Yes, Ryvon is fully GST compliant. We support CGST, SGST, and IGST calculations, and generate GSTR-1, GSTR-3B reports ready for filing.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-gray-50 rounded-xl overflow-hidden">
+                    <button class="w-full px-6 py-4 flex items-center justify-between text-left font-medium text-gray-900 hover:bg-gray-100 transition-colors" onclick="toggleFaq(this)">
+                        <span>How does billing work?</span>
+                        <i class="fas fa-chevron-down faq-icon transition-transform"></i>
+                    </button>
+                    <div class="faq-content px-6">
+                        <p class="pb-4 text-gray-600">Create professional invoices in seconds. Add items, apply discounts, calculate taxes automatically, and send via WhatsApp, Email, or print.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-gray-50 rounded-xl overflow-hidden">
+                    <button class="w-full px-6 py-4 flex items-center justify-between text-left font-medium text-gray-900 hover:bg-gray-100 transition-colors" onclick="toggleFaq(this)">
+                        <span>Can I migrate from another software?</span>
+                        <i class="fas fa-chevron-down faq-icon transition-transform"></i>
+                    </button>
+                    <div class="faq-content px-6">
+                        <p class="pb-4 text-gray-600">Absolutely! We provide free migration assistance from Tally, Vyapar, Excel, or any other billing software. Our team helps import your data seamlessly.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-gray-50 rounded-xl overflow-hidden">
+                    <button class="w-full px-6 py-4 flex items-center justify-between text-left font-medium text-gray-900 hover:bg-gray-100 transition-colors" onclick="toggleFaq(this)">
+                        <span>How are payments handled?</span>
+                        <i class="fas fa-chevron-down faq-icon transition-transform"></i>
+                    </button>
+                    <div class="faq-content px-6">
+                        <p class="pb-4 text-gray-600">Ryvon integrates with UPI, credit cards, and net banking. You can also record cash and cheque payments. Payment reminders are sent automatically.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-gray-50 rounded-xl overflow-hidden">
+                    <button class="w-full px-6 py-4 flex items-center justify-between text-left font-medium text-gray-900 hover:bg-gray-100 transition-colors" onclick="toggleFaq(this)">
+                        <span>Do I get cloud backup?</span>
+                        <i class="fas fa-chevron-down faq-icon transition-transform"></i>
+                    </button>
+                    <div class="faq-content px-6">
+                        <p class="pb-4 text-gray-600">Yes! All your data is automatically backed up to the cloud. Access your business data from any device, anywhere, anytime.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-gray-50 rounded-xl overflow-hidden">
+                    <button class="w-full px-6 py-4 flex items-center justify-between text-left font-medium text-gray-900 hover:bg-gray-100 transition-colors" onclick="toggleFaq(this)">
+                        <span>Can I use it offline?</span>
+                        <i class="fas fa-chevron-down faq-icon transition-transform"></i>
+                    </button>
+                    <div class="faq-content px-6">
+                        <p class="pb-4 text-gray-600">Yes, Ryvon works offline. Your data syncs automatically when you're back online. Perfect for areas with poor internet connectivity.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 gradient-bg-light relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
+                <div class="grid lg:grid-cols-2 gap-0">
+                    <!-- Left Side - Form -->
+                    <div class="p-12">
+                        <h2 class="text-4xl font-bold text-gray-900 mb-3">Get In Touch</h2>
+                        <p class="text-gray-600 mb-8">We are here for you! How can we help?</p>
+                        
+                        <form id="contactForm" onsubmit="handleContactSubmit(event)" class="space-y-6">
+                            <div>
+                                <input type="text" id="contactName" placeholder="Enter your name" required class="w-full px-6 py-4 bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-gray-900 placeholder-gray-400">
+                            </div>
+                            <div>
+                                <input type="email" id="contactEmail" placeholder="Enter your email address" required class="w-full px-6 py-4 bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-gray-900 placeholder-gray-400">
+                            </div>
+                            <div>
+                                <textarea id="contactMessage" placeholder="Go ahead, we are listening..." required rows="5" class="w-full px-6 py-4 bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-gray-900 placeholder-gray-400 resize-none"></textarea>
+                            </div>
+                            <button type="submit" class="w-full gradient-bg text-white py-4 rounded-xl font-bold text-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
+                                Submit
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Right Side - Contact Info & Illustration -->
+                    <div class="bg-gradient-to-br from-blue-50 to-purple-50 p-12 flex flex-col justify-between relative">
+                        <!-- Illustration Area -->
+                        <div class="flex-1 flex items-center justify-center mb-8">
+                            <div class="text-center">
+                                <div class="inline-block bg-white p-8 rounded-2xl shadow-lg mb-4">
+                                    <i class="fas fa-envelope text-6xl text-primary animate-float"></i>
+                                </div>
+                                <p class="text-gray-600 text-lg">We'll get back to you soon!</p>
+                            </div>
+                        </div>
+
+                        <!-- Contact Information -->
+                        <div class="space-y-6">
+                            <div class="flex items-center gap-4 bg-white p-4 rounded-xl shadow-sm">
+                                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-map-marker-alt text-primary text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="text-gray-900 font-semibold">Chennai, Tamil Nadu, India</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 bg-white p-4 rounded-xl shadow-sm">
+                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-phone text-green-600 text-xl"></i>
+                                </div>
+                                <div>
+                                    <a href="tel:+917639300330" class="text-gray-900 font-semibold hover:text-primary transition-colors">+91 76393 00330</a>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 bg-white p-4 rounded-xl shadow-sm">
+                                <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-envelope text-purple-600 text-xl"></i>
+                                </div>
+                                <div>
+                                    <a href="mailto:ryvoninfotech@gmail.com" class="text-gray-900 font-semibold hover:text-primary transition-colors break-all">ryvoninfotech@gmail.com</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Social Media (Vertical Bar) -->
+                        <div class="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-full">
+                            <div class="bg-primary rounded-l-2xl shadow-lg py-4 px-3 space-y-4">
+                                <a href="https://www.facebook.com/share/1N1xzmJmMA/" target="_blank" class="block text-white hover:scale-110 transition-transform">
+                                    <i class="fab fa-facebook-f text-xl"></i>
+                                </a>
+                                <a href="https://www.instagram.com/ryvoninfotech?utm_source=qr&igsh=OXlob3hqd3c4OWZo" target="_blank" class="block text-white hover:scale-110 transition-transform">
+                                    <i class="fab fa-instagram text-xl"></i>
+                                </a>
+                                <a href="https://www.linkedin.com/in/ramachandran-k-b62b293b4?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" class="block text-white hover:scale-110 transition-transform">
+                                    <i class="fab fa-linkedin-in text-xl"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 gradient-bg relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;"></div>
+        </div>
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 scroll-reveal">
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Start billing in under 5 minutes!</h2>
+            <p class="text-xl text-blue-100 mb-8">Join 5,000+ businesses already using Ryvon</p>
+            <button onclick="openTrialModal()" class="bg-white text-primary px-10 py-4 rounded-full font-bold text-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all inline-flex items-center gap-2">
+                <i class="fas fa-fire"></i> Start Free Trial
+            </button>
+            <p class="mt-4 text-blue-200 text-sm">No credit card required • Free 14-day trial</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <div class="flex items-center justify-start mb-4">
+                        <img src="logo.jpeg" alt="Ryvon Logo" class="h-12 w-auto object-contain">
+                    </div>
+                    <p class="text-gray-400 mb-4">Modern billing software for Indian businesses. GST compliant, cloud-based, and easy to use.</p>
+                    <div class="flex gap-4">
+                        <a href="https://www.facebook.com/share/1N1xzmJmMA/" target="_blank" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/ryvoninfotech?utm_source=qr&igsh=OXlob3hqd3c4OWZo" target="_blank" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.linkedin.com/in/ramachandran-k-b62b293b4?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Product</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#features" class="hover:text-white transition-colors">Features</a></li>
+                        <li><a href="#pricing" class="hover:text-white transition-colors">Pricing</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Integrations</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Updates</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Company</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Careers</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
+                        <li><a href="#contact" class="hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Support</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Help Center</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Security</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-400 text-sm">© 2026 Ryvon Information Technologies Pvt Ltd. All rights reserved.</p>
+                <div class="flex items-center gap-4 text-sm text-gray-400">
+                    <span class="flex items-center gap-2"><i class="fas fa-shield-alt text-green-500"></i> SSL Secured</span>
+                    <span class="flex items-center gap-2"><i class="fas fa-cloud text-blue-500"></i> Cloud Protected</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <!-- Registration Modal -->
+    <div id="trialModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl max-w-md w-full p-8 relative transform transition-all scale-95 opacity-0" id="trialModalContent">
+            <button onclick="closeModal('trialModal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-primary text-2xl mx-auto mb-4">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900">Create Account</h3>
+                <p class="text-gray-600 mt-2">Register to get started with Ryvon</p>
+            </div>
+            <form class="space-y-4" onsubmit="handleRegistration(event)">
+                <input type="text" id="regUsername" placeholder="Username" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary">
+                <input type="email" id="regEmail" placeholder="Email Address" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary">
+                <input type="password" id="regPassword" placeholder="Password" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary">
+                <input type="tel" id="regPhone" placeholder="Phone Number" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary">
+                <input type="text" id="regBusiness" placeholder="Business Name" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary">
+                <button type="submit" class="w-full gradient-bg text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all" id="regSubmitBtn">
+                    Create Account
+                </button>
+                <p class="text-center text-gray-600 text-sm">Already have an account? <button type="button" onclick="switchToLogin()" class="text-primary font-semibold">Login</button></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl max-w-md w-full p-8 relative transform transition-all scale-95 opacity-0" id="loginModalContent">
+            <button onclick="closeModal('loginModal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-2xl mx-auto mb-4">
+                    <i class="fas fa-sign-in-alt"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900">Login</h3>
+                <p class="text-gray-600 mt-2">Sign in to your Ryvon account</p>
+            </div>
+            <form class="space-y-4" onsubmit="handleLogin(event)">
+                <input type="text" id="loginUsername" placeholder="Username" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary">
+                <input type="password" id="loginPassword" placeholder="Password" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary">
+                <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition-all" id="loginSubmitBtn">
+                    Login
+                </button>
+                <p class="text-center text-gray-600 text-sm">Don't have an account? <button type="button" onclick="switchToRegister()" class="text-primary font-semibold">Register</button></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Demo Modal -->
+    <div id="demoModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl max-w-md w-full p-8 relative transform transition-all scale-95 opacity-0" id="demoModalContent">
+            <button onclick="closeModal('demoModal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-2xl mx-auto mb-4">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900">Book a Demo</h3>
+                <p class="text-gray-600 mt-2">See Ryvon in action with a personalized walkthrough.</p>
+            </div>
+            <form class="space-y-4" onsubmit="handleDemoSubmit(event)">
+                <input type="text" placeholder="Full Name" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary">
+                <input type="email" placeholder="Email Address" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary">
+                <input type="tel" placeholder="Phone Number" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary">
+                <select class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-gray-600">
+                    <option value="">Select Business Type</option>
+                    <option value="retail">Retail Shop</option>
+                    <option value="restaurant">Restaurant</option>
+                    <option value="service">Service Business</option>
+                    <option value="ev">EV/Taxi Service</option>
+                    <option value="other">Other</option>
+                </select>
+                <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition-all">
+                    Schedule Demo
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Backend API URL - Update this with your actual backend server
+        const API_URL = 'http://localhost:5000/api';
+        let currentUser = null;
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+        }
+
+        // Modal Functions
+        function openTrialModal() {
+            const modal = document.getElementById('trialModal');
+            const content = document.getElementById('trialModalContent');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function switchToLogin() {
+            closeModal('trialModal');
+            setTimeout(() => openLoginModal(), 300);
+        }
+
+        function switchToRegister() {
+            closeModal('loginModal');
+            setTimeout(() => openTrialModal(), 300);
+        }
+
+        function openLoginModal() {
+            const modal = document.getElementById('loginModal');
+            const content = document.getElementById('loginModalContent');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function openDemoModal() {
+            const modal = document.getElementById('demoModal');
+            const content = document.getElementById('demoModalContent');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            const content = modal.querySelector('div');
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+
+        // Form Handlers
+        async function handleRegistration(e) {
+            e.preventDefault();
+            const button = document.getElementById('regSubmitBtn');
+            button.disabled = true;
+            button.textContent = 'Creating Account...';
+
+            const userData = {
+                username: document.getElementById('regUsername').value,
+                email: document.getElementById('regEmail').value,
+                password: document.getElementById('regPassword').value,
+                phone: document.getElementById('regPhone').value,
+                business: document.getElementById('regBusiness').value
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert('Account created successfully! Please login with your credentials.');
+                    closeModal('trialModal');
+                    setTimeout(() => openLoginModal(), 300);
+                } else {
+                    alert('Error: ' + (result.message || 'Registration failed'));
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                alert('Connection error. Make sure backend server is running on http://localhost:5000');
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Create Account';
+            }
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const button = document.getElementById('loginSubmitBtn');
+            button.disabled = true;
+            button.textContent = 'Logging in...';
+
+            const credentials = {
+                username: document.getElementById('loginUsername').value,
+                password: document.getElementById('loginPassword').value
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(credentials)
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.user) {
+                    currentUser = result.user;
+                    localStorage.setItem('authToken', result.token);
+                    localStorage.setItem('user', JSON.stringify(result.user));
+                    alert('Login successful!');
+                    closeModal('loginModal');
+                    showPersonalDashboard();
+                } else {
+                    alert('Error: ' + (result.message || 'Login failed'));
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('Connection error. Make sure backend server is running on http://localhost:5000');
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Login';
+            }
+        }
+
+        // Load user from localStorage on page load
+        function checkAuthStatus() {
+            const savedUser = localStorage.getItem('user');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showPersonalDashboard();
+            }
+        }
+
+        function showPersonalDashboard() {
+            if (!currentUser) {
+                alert('Please login first');
+                return;
+            }
+
+            // Hide modals
+            closeModal('trialModal');
+            closeModal('loginModal');
+            closeModal('demoModal');
+
+            // Create professional dashboard
+            const dashboardHTML = `
+                <div id="personalDashboard" class="fixed inset-0 bg-gray-900 z-50 overflow-auto">
+                    <div class="flex h-screen">
+                        <!-- Sidebar -->
+                        <div class="w-64 bg-gray-800 text-white p-6 fixed h-full overflow-y-auto">
+                            <div class="flex items-center justify-center mb-8">
+                                <img src="logo.jpeg" alt="Ryvon Logo" class="h-12 w-auto object-contain">
+                            </div>
+                            
+                            <div class="bg-gray-700 p-4 rounded-lg mb-8">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-teal-400 rounded-full flex items-center justify-center font-bold text-gray-800">
+                                        ${currentUser.username.charAt(0).toUpperCase()}
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold">${currentUser.username}</p>
+                                        <p class="text-sm text-gray-400">${currentUser.business}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <nav class="space-y-2">
+                                <button onclick="dashboardTab('overview')" class="w-full text-left px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors flex items-center gap-2 active-tab">
+                                    <i class="fas fa-chart-line"></i> Overview
+                                </button>
+                                <button onclick="dashboardTab('transactions')" class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-2">
+                                    <i class="fas fa-receipt"></i> Transactions
+                                </button>
+                                <button onclick="dashboardTab('analytics')" class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-2">
+                                    <i class="fas fa-chart-bar"></i> Analytics
+                                </button>
+                                <button onclick="dashboardTab('settings')" class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-2">
+                                    <i class="fas fa-cog"></i> Settings
+                                </button>
+                            </nav>
+
+                            <div class="border-t border-gray-700 mt-8 pt-8 space-y-2">
+                                <button onclick="logout()" class="w-full text-left px-4 py-2 rounded-lg hover:bg-red-600 transition-colors flex items-center gap-2">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                </button>
+                                <button onclick="closeDashboard()" class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-2">
+                                    <i class="fas fa-times"></i> Close
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Main Content -->
+                        <div class="ml-64 flex-1 bg-gray-50">
+                            <div class="p-8">
+                                <!-- Header -->
+                                <div class="flex justify-between items-center mb-8">
+                                    <div>
+                                        <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
+                                        <p class="text-gray-600 mt-1">Welcome back, ${currentUser.username}!</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-gray-600">${new Date().toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Overview Tab -->
+                                <div id="overview-tab" class="dashboard-tab">
+                                    <!-- Statistics Cards -->
+                                    <div class="grid grid-cols-4 gap-4 mb-8">
+                                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                                            <div class="flex justify-between items-start">
+                                                <div>
+                                                    <p class="text-gray-600 text-sm">Total Revenue</p>
+                                                    <p class="text-3xl font-bold text-gray-900 mt-2">₹24,500</p>
+                                                    <p class="text-green-600 text-sm mt-2">↑ 12.5%</p>
+                                                </div>
+                                                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 text-xl">
+                                                    <i class="fas fa-rupee-sign"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                                            <div class="flex justify-between items-start">
+                                                <div>
+                                                    <p class="text-gray-600 text-sm">Total Invoices</p>
+                                                    <p class="text-3xl font-bold text-gray-900 mt-2">156</p>
+                                                    <p class="text-green-600 text-sm mt-2">↑ 8.2%</p>
+                                                </div>
+                                                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center text-green-600 text-xl">
+                                                    <i class="fas fa-file-invoice"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                                            <div class="flex justify-between items-start">
+                                                <div>
+                                                    <p class="text-gray-600 text-sm">Pending Amount</p>
+                                                    <p class="text-3xl font-bold text-gray-900 mt-2">₹5,200</p>
+                                                    <p class="text-red-600 text-sm mt-2">↓ 3.1%</p>
+                                                </div>
+                                                <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center text-orange-600 text-xl">
+                                                    <i class="fas fa-clock"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                                            <div class="flex justify-between items-start">
+                                                <div>
+                                                    <p class="text-gray-600 text-sm">Active Customers</p>
+                                                    <p class="text-3xl font-bold text-gray-900 mt-2">32</p>
+                                                    <p class="text-green-600 text-sm mt-2">↑ 5.3%</p>
+                                                </div>
+                                                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600 text-xl">
+                                                    <i class="fas fa-users"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Charts - Compact -->
+                                    <div class="grid grid-cols-3 gap-4 mb-6">
+                                        <!-- Revenue Chart -->
+                                        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                                            <h3 class="text-sm font-bold text-gray-900 mb-3">Revenue Trend</h3>
+                                            <div style="height: 180px;">
+                                                <canvas id="revenueChart"></canvas>
+                                            </div>
+                                        </div>
+
+                                        <!-- Sales by Category -->
+                                        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                                            <h3 class="text-sm font-bold text-gray-900 mb-3">Sales by Category</h3>
+                                            <div style="height: 180px;">
+                                                <canvas id="categoryChart"></canvas>
+                                            </div>
+                                        </div>
+
+                                        <!-- Monthly Performance -->
+                                        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                                            <h3 class="text-sm font-bold text-gray-900 mb-3">Monthly Performance</h3>
+                                            <div style="height: 180px;">
+                                                <canvas id="monthlyChart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Transactions Tab -->
+                                <div id="transactions-tab" class="dashboard-tab hidden">
+                                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                                        <h3 class="text-lg font-bold text-gray-900 mb-4">Recent Transactions</h3>
+                                        <div id="historyContainer" class="text-center text-gray-600">Loading transaction history...</div>
+                                    </div>
+                                </div>
+
+                                <!-- Analytics Tab -->
+                                <div id="analytics-tab" class="dashboard-tab hidden">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                                            <h3 class="text-sm font-bold text-gray-900 mb-3">Payment Status</h3>
+                                            <div style="height: 200px;">
+                                                <canvas id="paymentChart"></canvas>
+                                            </div>
+                                        </div>
+                                        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                                            <h3 class="text-sm font-bold text-gray-900 mb-3">Invoice Types</h3>
+                                            <div style="height: 200px;">
+                                                <canvas id="invoiceChart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Settings Tab -->
+                                <div id="settings-tab" class="dashboard-tab hidden">
+                                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 max-w-2xl">
+                                        <div class="flex justify-between items-center mb-6">
+                                            <h3 class="text-lg font-bold text-gray-900">Account Settings</h3>
+                                            <button id="editToggleBtn" onclick="toggleEdit()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all text-sm font-medium flex items-center gap-2">
+                                                <i class="fas fa-edit"></i> Edit Profile
+                                            </button>
+                                        </div>
+                                        <form id="settingsForm" onsubmit="updateProfile(event)" class="space-y-4">
+                                            <div>
+                                                <label class="text-gray-600 text-sm font-medium">Username</label>
+                                                <input type="text" id="editUsername" value="${currentUser.username}" disabled class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 mt-1">
+                                            </div>
+                                            <div>
+                                                <label class="text-gray-600 text-sm font-medium">Email</label>
+                                                <input type="email" id="editEmail" value="${currentUser.email}" disabled class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 mt-1">
+                                            </div>
+                                            <div>
+                                                <label class="text-gray-600 text-sm font-medium">Phone</label>
+                                                <input type="tel" id="editPhone" value="${currentUser.phone}" disabled class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 mt-1">
+                                            </div>
+                                            <div>
+                                                <label class="text-gray-600 text-sm font-medium">Business Name</label>
+                                                <input type="text" id="editBusiness" value="${currentUser.business}" disabled class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 mt-1">
+                                            </div>
+                                            <div id="saveButtonContainer" class="hidden pt-4 border-t border-gray-200">
+                                                <div class="flex gap-3">
+                                                    <button type="submit" class="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all font-medium">
+                                                        <i class="fas fa-save"></i> Save Changes
+                                                    </button>
+                                                    <button type="button" onclick="cancelEdit()" class="flex-1 px-4 py-2 bg-gray-200 text-gray-900 rounded-lg hover:bg-gray-300 transition-all font-medium">
+                                                        <i class="fas fa-times"></i> Cancel
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Remove existing dashboard if present
+            const existingDashboard = document.getElementById('personalDashboard');
+            if (existingDashboard) {
+                existingDashboard.remove();
+            }
+
+            // Add dashboard to page
+            document.body.insertAdjacentHTML('beforeend', dashboardHTML);
+            loadTransactionHistory();
+            initializeCharts();
+        }
+
+        function dashboardTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.dashboard-tab').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+
+            // Remove active class from all buttons
+            document.querySelectorAll('.nav-button').forEach(btn => {
+                btn.classList.remove('bg-blue-600');
+                btn.classList.add('hover:bg-gray-700');
+            });
+
+            // Show selected tab
+            const selectedTab = document.getElementById(tabName + '-tab');
+            if (selectedTab) {
+                selectedTab.classList.remove('hidden');
+            }
+
+            // Add active class to clicked button
+            event.target.classList.add('bg-blue-600');
+            event.target.classList.remove('hover:bg-gray-700');
+
+            if (tabName === 'analytics') {
+                setTimeout(() => {
+                    initializeAnalyticsCharts();
+                }, 100);
+            }
+        }
+
+        function initializeCharts() {
+            // Revenue Chart
+            const revenueCtx = document.getElementById('revenueChart');
+            if (revenueCtx) {
+                new Chart(revenueCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        datasets: [{
+                            label: 'Revenue (₹)',
+                            data: [2500, 3100, 2800, 3900, 4200, 4500],
+                            borderColor: '#2563eb',
+                            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: '#2563eb',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 1,
+                            pointRadius: 3,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { display: false },
+                            tooltip: { enabled: true }
+                        },
+                        scales: {
+                            y: { 
+                                beginAtZero: true, 
+                                grid: { color: 'rgba(0,0,0,0.05)' },
+                                ticks: { font: { size: 10 } }
+                            },
+                            x: { ticks: { font: { size: 10 } } }
+                        }
+                    }
+                });
+            }
+
+            // Category Chart
+            const categoryCtx = document.getElementById('categoryChart');
+            if (categoryCtx) {
+                new Chart(categoryCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Electronics', 'Clothing', 'Food', 'Others'],
+                        datasets: [{
+                            data: [30, 25, 20, 25],
+                            backgroundColor: ['#2563eb', '#10b981', '#f59e0b', '#ef4444'],
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { 
+                                position: 'bottom',
+                                labels: { font: { size: 10 }, padding: 8 }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Monthly Chart
+            const monthlyCtx = document.getElementById('monthlyChart');
+            if (monthlyCtx) {
+                new Chart(monthlyCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                        datasets: [{
+                            label: 'Invoices',
+                            data: [25, 35, 28, 42],
+                            backgroundColor: '#2563eb',
+                            borderRadius: 4
+                        }, {
+                            label: 'Payments',
+                            data: [20, 30, 25, 38],
+                            backgroundColor: '#10b981',
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { 
+                                labels: { font: { size: 10 }, padding: 8 }
+                            }
+                        },
+                        scales: { 
+                            y: { 
+                                beginAtZero: true,
+                                ticks: { font: { size: 10 } }
+                            },
+                            x: { ticks: { font: { size: 10 } } }
+                        }
+                    }
+                });
+            }
+        }
+
+        function initializeAnalyticsCharts() {
+            // Payment Status Chart
+            const paymentCtx = document.getElementById('paymentChart');
+            if (paymentCtx && !paymentCtx.chart) {
+                paymentCtx.chart = new Chart(paymentCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Completed', 'Pending', 'Failed'],
+                        datasets: [{
+                            data: [70, 20, 10],
+                            backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { 
+                                position: 'bottom',
+                                labels: { font: { size: 10 }, padding: 8 }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Invoice Chart
+            const invoiceCtx = document.getElementById('invoiceChart');
+            if (invoiceCtx && !invoiceCtx.chart) {
+                invoiceCtx.chart = new Chart(invoiceCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['GST Invoice', 'Non-GST', 'Bill'],
+                        datasets: [{
+                            label: 'Count',
+                            data: [60, 30, 20],
+                            backgroundColor: ['#2563eb', '#10b981', '#f59e0b'],
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { 
+                                labels: { font: { size: 10 }, padding: 8 }
+                            }
+                        },
+                        scales: { 
+                            y: { 
+                                beginAtZero: true,
+                                ticks: { font: { size: 10 } }
+                            },
+                            x: { ticks: { font: { size: 10 } } }
+                        }
+                    }
+                });
+            }
+        }
+
+        async function loadTransactionHistory() {
+            const historyContainer = document.getElementById('historyContainer');
+            if (!historyContainer) return;
+
+            try {
+                const token = localStorage.getItem('authToken');
+                const response = await fetch(`${API_URL}/history/${currentUser.username}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const result = await response.json();
+                let historyHTML = '';
+
+                if (result.history && result.history.length > 0) {
+                    historyHTML = `
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="border-b border-gray-200">
+                                        <th class="text-left py-4 px-6 text-gray-600 font-semibold text-sm">Date</th>
+                                        <th class="text-left py-4 px-6 text-gray-600 font-semibold text-sm">Amount</th>
+                                        <th class="text-left py-4 px-6 text-gray-600 font-semibold text-sm">Type</th>
+                                        <th class="text-left py-4 px-6 text-gray-600 font-semibold text-sm">Status</th>
+                                        <th class="text-left py-4 px-6 text-gray-600 font-semibold text-sm">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${result.history.map(item => {
+                                        const statusColor = item.status === 'completed' ? 'bg-green-100 text-green-700' : 
+                                                          item.status === 'pending' ? 'bg-yellow-100 text-yellow-700' : 
+                                                          'bg-red-100 text-red-700';
+                                        const typeIcon = item.type === 'invoice' ? '📄' :
+                                                       item.type === 'payment' ? '💳' : '↩️';
+                                        return `
+                                            <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                                                <td class="py-4 px-6 text-gray-900">${new Date(item.date).toLocaleDateString()}</td>
+                                                <td class="py-4 px-6 text-gray-900 font-semibold">₹${item.amount.toLocaleString('en-IN')}</td>
+                                                <td class="py-4 px-6"><span class="text-gray-600">${typeIcon} ${item.type.charAt(0).toUpperCase() + item.type.slice(1)}</span></td>
+                                                <td class="py-4 px-6"><span class="px-3 py-1 ${statusColor} rounded-full text-sm font-medium">${item.status.charAt(0).toUpperCase() + item.status.slice(1)}</span></td>
+                                                <td class="py-4 px-6 text-gray-600 text-sm">${item.description || '-'}</td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                } else {
+                    historyHTML = '<div class="text-center text-gray-600 py-12"><i class="fas fa-inbox text-3xl mb-3 m-0 opacity-50"></i><p class="mt-3">No transaction history yet<br><small>Start billing with Ryvon to see your transactions here</small></p></div>';
+                }
+
+                historyContainer.innerHTML = historyHTML;
+            } catch (error) {
+                console.error('Error loading history:', error);
+                historyContainer.innerHTML = '<div class="text-center text-red-600 py-8"><i class="fas fa-exclamation-circle text-2xl mb-2"></i><p>Unable to load history. Backend may not be running.</p></div>';
+            }
+        }
+
+        function closeDashboard() {
+            const dashboard = document.getElementById('personalDashboard');
+            if (dashboard) {
+                dashboard.remove();
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
+            currentUser = null;
+            closeDashboard();
+            alert('Logged out successfully');
+        }
+
+        function toggleEdit() {
+            const inputs = ['editEmail', 'editPhone', 'editBusiness'];
+            const editBtn = document.getElementById('editToggleBtn');
+            const saveContainer = document.getElementById('saveButtonContainer');
+            
+            inputs.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.disabled = !input.disabled;
+                    input.classList.toggle('bg-gray-50');
+                    input.classList.toggle('bg-white');
+                }
+            });
+
+            if (saveContainer) {
+                saveContainer.classList.toggle('hidden');
+            }
+
+            if (editBtn) {
+                if (editBtn.textContent.includes('Edit')) {
+                    editBtn.innerHTML = '<i class="fas fa-times"></i> Cancel Edit';
+                    editBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                    editBtn.classList.add('bg-gray-600', 'hover:bg-gray-700');
+                } else {
+                    cancelEdit();
+                }
+            }
+        }
+
+        function cancelEdit() {
+            // Reset to original values
+            document.getElementById('editEmail').value = currentUser.email;
+            document.getElementById('editPhone').value = currentUser.phone;
+            document.getElementById('editBusiness').value = currentUser.business;
+            
+            // Disable inputs
+            ['editEmail', 'editPhone', 'editBusiness'].forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.disabled = true;
+                    input.classList.add('bg-gray-50');
+                    input.classList.remove('bg-white');
+                }
+            });
+
+            // Hide save buttons
+            const saveContainer = document.getElementById('saveButtonContainer');
+            if (saveContainer) {
+                saveContainer.classList.add('hidden');
+            }
+
+            // Reset edit button
+            const editBtn = document.getElementById('editToggleBtn');
+            if (editBtn) {
+                editBtn.innerHTML = '<i class="fas fa-edit"></i> Edit Profile';
+                editBtn.classList.remove('bg-gray-600', 'hover:bg-gray-700');
+                editBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+            }
+        }
+
+        async function updateProfile(e) {
+            e.preventDefault();
+            
+            const updatedData = {
+                email: document.getElementById('editEmail').value,
+                phone: document.getElementById('editPhone').value,
+                business: document.getElementById('editBusiness').value
+            };
+
+            try {
+                // Update local user data
+                currentUser.email = updatedData.email;
+                currentUser.phone = updatedData.phone;
+                currentUser.business = updatedData.business;
+                
+                localStorage.setItem('user', JSON.stringify(currentUser));
+                
+                alert('Profile updated successfully!');
+                cancelEdit();
+                
+                // You can add backend API call here to save to database
+                // const token = localStorage.getItem('authToken');
+                // await fetch(`${API_URL}/users/update`, {
+                //     method: 'PUT',
+                //     headers: {
+                //         'Authorization': `Bearer ${token}`,
+                //         'Content-Type': 'application/json'
+                //     },
+                //     body: JSON.stringify(updatedData)
+                // });
+                
+            } catch (error) {
+                console.error('Update error:', error);
+                alert('Failed to update profile');
+            }
+        }
+
+        function handleDemoSubmit(e) {
+            e.preventDefault();
+            alert('Thank you! Our team will contact you within 24 hours to schedule your demo.');
+            closeModal('demoModal');
+        }
+
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('contactName').value;
+            const email = document.getElementById('contactEmail').value;
+            const message = document.getElementById('contactMessage').value;
+
+            // Here you can add API call to send the contact form data to backend
+            console.log('Contact Form Submitted:', { name, email, message });
+
+            alert(`Thank you ${name}! We've received your message and will get back to you soon at ${email}`);
+            
+            // Reset form
+            document.getElementById('contactForm').reset();
+        }
+
+        // FAQ Toggle
+        function toggleFaq(button) {
+            const item = button.parentElement;
+            const isActive = item.classList.contains('active');
+            
+            // Close all FAQs
+            document.querySelectorAll('.faq-item').forEach(faq => {
+                faq.classList.remove('active');
+            });
+            
+            // Open clicked if wasn't active
+            if (!isActive) {
+                item.classList.add('active');
+            }
+        }
+
+        // Screenshot Carousel
+        function scrollScreenshots(direction) {
+            const container = document.getElementById('screenshotCarousel');
+            const scrollAmount = container.offsetWidth * 0.8;
+            container.scrollBy({
+                left: direction * scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+
+        // Scroll Reveal Animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.scroll-reveal').forEach((el) => observer.observe(el));
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-md');
+            } else {
+                navbar.classList.remove('shadow-md');
+            }
+        });
+
+        // Close modals on outside click
+        window.onclick = function(event) {
+            if (event.target.id === 'trialModal') {
+                closeModal('trialModal');
+            }
+            if (event.target.id === 'demoModal') {
+                closeModal('demoModal');
+            }
+            if (event.target.id === 'loginModal') {
+                closeModal('loginModal');
+            }
+        }
+
+        // Check auth status when page loads
+        window.addEventListener('load', checkAuthStatus);
+    </script>
+</body>
+</html>
