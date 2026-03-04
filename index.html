@@ -1021,8 +1021,10 @@
     </div>
 
     <script>
-        // Backend API URL - Update this with your actual backend server
-        const API_URL = 'http://localhost:5000/api';
+        // Backend API URL - Auto-detect environment
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:5000/api' 
+            : '/api';
         let currentUser = null;
 
         // Mobile Menu Toggle
