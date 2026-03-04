@@ -74,11 +74,83 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
+// Seed demo user
+async function seedDemoUser() {
+    try {
+        await connectToDatabase();
+        
+        const existingAdmin = await User.findOne({ username: 'admin' });
+        
+        if (!existingAdmin) {
+            const hashedPassword = await bcrypt.hash('admin', 10);
+            const demoUser = new User({
+                username: 'admin',
+                email: 'admin@ryvoninfotech.com',
+                password: hashedPassword,
+                phone: '7639300330',
+                business: 'Ryvon Demo Store'
+            });
+            
+            await demoUser.save();
+            console.log('✅ Demo user created: username=admin, password=admin');
+            
+            // Add sample transactions
+            const sampleTransactions = [
+                {
+                    username: 'admin',
+                    amount: 5000,
+                    type: 'invoice',
+                    status: 'completed',
+                    description: 'Sample Invoice #001'
+                },
+                {
+                    username: 'admin',
+                    amount: 3500,
+                    type: 'payment',
+                    status: 'completed',
+                    description: 'Payment Received'
+                },
+                {
+                    username: 'admin',
+                    amount: 1200,
+                    type: 'refund',
+                    status: 'completed',
+                    description: 'Refund Processed'
+                },
+                {
+                    username: 'admin',
+                    amount: 2800,
+                    type: 'invoice',
+                    status: 'pending',
+                    description: 'Pending Invoice #002'
+                }
+            ];
+            
+            await Transaction.insertMany(sampleTransactions);
+            console.log('✅ Sample transactions added to demo account');
+        } else {
+            console.log('✅ Demo user already exists');
+        }
+    } catch (error) {
+        console.error('Error seeding demo user:', error.message);
+    }
+}
+
 // Routes
 
 // Health check
 app.get('/api/health', (req, res) => {
     res.json({ message: 'Server is running', timestamp: new Date().toISOString() });
+});
+
+// Initialize demo user (for Vercel cold starts)
+app.get('/api/seed', async (req, res) => {
+    try {
+        await seedDemoUser();
+        res.json({ message: 'Database seeded successfully', demo: { username: 'admin', password: 'admin' } });
+    } catch (error) {
+        res.status(500).json({ message: 'Error seeding database', error: error.message });
+    }
 });
 
 // Register endpoint
@@ -247,8 +319,9 @@ module.exports = app;
 // Local development
 if (process.env.NODE_ENV !== 'production') {
     const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => {
+    app.listen(PORT, async () => {
         console.log(`Server running on http://localhost:${PORT}`);
-        connectToDatabase();
+        await connectToDatabase();
+        await seedDemoUser();
     });
 }
